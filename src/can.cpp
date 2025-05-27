@@ -233,3 +233,8 @@ int can_hw::bind(int fd, const std::string &ifname)
 
     return ::bind(can_sock_fd, (struct sockaddr *)&addr, sizeof(addr));
 }
+
+int can_socket_new()
+{
+    return socket(PF_CAN, SOCK_RAW, CAN_RAW);
+}

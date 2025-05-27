@@ -18,5 +18,5 @@ public:
 private:
     int epoll_fd;
     bool running;
-    std::map<int, std::shared_ptr<ecu_hw>> ecu_list;
+    std::vector<std::shared_ptr<ecu_hw>> ecu_list;
 };

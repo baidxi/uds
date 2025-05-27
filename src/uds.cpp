@@ -4,12 +4,13 @@
 #include <thread>
 
 #include "uds.hpp"
+#include "can.hpp"
 
 uds::uds()
 {
     epoll_event event;
 
-    epoll_fd = epoll_create(5);
+    epoll_fd = epoll_create(100);
     if (epoll_fd < 0) {
         fprintf(stderr, "epoll fd err\n");
         return;
@@ -64,18 +65,15 @@ int uds::handle_msg(void *buf, size_t size)
 int uds::register_ecu(int fd, std::shared_ptr<ecu_hw> ecu)
 {
     epoll_event ev;
-    int ret;
-
     ev.data.ptr = ecu.get();
     ev.events = EPOLLIN;
 
-    ret = epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &ev);
-    if (ret) {
-        fprintf(stderr, "register ecu err\n");
-        return ret;
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &ev)) {
+        fprintf(stderr, "add ecu err\n");
+        return -1;
     }
 
-    ecu_list.insert({fd, ecu});
+    ecu_list.push_back(ecu);
 
     return 0;
 }

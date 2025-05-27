@@ -24,3 +24,5 @@ protected:
         return can_sock_fd;
     }
 };
+
+int can_socket_new();

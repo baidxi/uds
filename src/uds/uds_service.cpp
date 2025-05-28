@@ -10,7 +10,7 @@ uds_service::~uds_service()
 
 }
 
-void uds_service::bind(std::shared_ptr<uds_server> svr)
+void uds_service::bind(uds_server *svr)
 {
     server = svr;
 }

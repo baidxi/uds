@@ -95,6 +95,7 @@ int uds_server::register_ecu(int fd, std::shared_ptr<ecu_hw> ecu)
 
 int uds_server::register_service(uint8_t sid, std::shared_ptr<uds_service> svr)
 {
+    svr->bind(this);
     services.insert({sid, svr});
     return 0;
 }

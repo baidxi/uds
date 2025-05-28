@@ -6,11 +6,11 @@ class uds_service {
 public:
     uds_service();
     ~uds_service();
-    void bind(std::shared_ptr<uds_server> svr);
+    void bind(uds_server *svr);
     virtual int handle_msg(void *buf, size_t size) = 0;
     int request(uint8_t sid, void *buf, size_t len);
 private:
-    std::shared_ptr<uds_server> server;
+    uds_server *server;
 };
 
 struct uds_service_message {

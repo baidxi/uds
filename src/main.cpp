@@ -1,14 +1,16 @@
-#include "uds.hpp"
+#include "uds_server.hpp"
 
 int main()
 {
-    auto _uds = new uds();
+    auto uds = std::make_shared<uds_server>();
 
-    _uds->bind("can0");
-    _uds->init("can0", 125000);
-    _uds->up("can0");
+    uds->bind("can0");
+    uds->init("can0", 125000);
+    uds->up("can0");
 
-    delete _uds;
+    uds->service_init();
+
+    uds->loop_run();
 
     return 0;
 }

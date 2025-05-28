@@ -20,8 +20,8 @@ public:
     int bind(const std::string &ifname);
     int bind(int fd, const std::string &ifname);
 protected:
-    int getfd() const {
-        return can_sock_fd;
+    std::string get_ifname() {
+        return name;
     }
 };
 

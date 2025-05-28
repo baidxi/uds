@@ -149,6 +149,8 @@ int can_hw::init(const std::string &ifname, uint32_t bitrate)
         return -1;
     }
 
+    this->name = ifname;
+
     return 0;
 }
 
@@ -208,6 +210,7 @@ int can_hw::bind(const std::string &ifname)
 {
     sockaddr_can addr;
     ifreq ifr;
+    int err;
 
     can_sock_fd = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if (can_sock_fd < 0)
@@ -217,7 +220,9 @@ int can_hw::bind(const std::string &ifname)
     addr.can_family = AF_CAN;
     addr.can_ifindex = if_nametoindex(ifname.c_str());
 
-    return ::bind(can_sock_fd, (struct sockaddr *)&addr, sizeof(addr));
+    err = ::bind(can_sock_fd, (struct sockaddr *)&addr, sizeof(addr));
+
+    return err ? err : can_sock_fd;
 }
 
 int can_hw::bind(int fd, const std::string &ifname)

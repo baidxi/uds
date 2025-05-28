@@ -1,22 +1,27 @@
 #pragma once
 
-#include "uds_server.hpp"
+#include <stdint.h>
+#include <stddef.h>
 
+class uds_server;
+
+struct uds_service_message {
+    uint8_t sid;
+    uint8_t sub_id;
+    uint8_t param[];
+};
 class uds_service {
 public:
     uds_service();
     ~uds_service();
     void bind(uds_server *svr);
     virtual int handle_msg(void *buf, size_t size) = 0;
-    int request(uint8_t sid, void *buf, size_t len);
+    int response(void *buf, size_t len);
 private:
     uds_server *server;
 };
 
-struct uds_service_message {
-    uint8_t type;
-    uint8_t param[];
-};
+
 
 class diag_session_control:public uds_service
 {

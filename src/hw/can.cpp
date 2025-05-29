@@ -44,7 +44,7 @@ can_hw::~can_hw()
 
 int can_hw::send(const void *buf, size_t len)
 {
-   return ::send(can_sock_fd, buf, len, 0);
+    return ::send(can_sock_fd, buf, len, 0);
 }
 
 size_t can_hw::recv(void *buf, size_t size)

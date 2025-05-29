@@ -19,34 +19,33 @@ void uds_service::bind(uds_server *svr)
     server = svr;
 }
 
-int uds_service::response(void *buf, size_t size)
+int uds_service::response(int can_id, void *buf, size_t len)
 {
     can_frame frame;
-
-    memcpy(&frame.data, buf, size);
+    frame.can_id = can_id;
+    frame.len = len;
+    memcpy(frame.data, buf, len);
 
     return server->response(&frame, sizeof(frame));
 }
 
-int diag_session_control::handle_msg(void *buf, size_t size)
+int diag_session_control::handle_msg(int can_id, void *buf, size_t size)
 {
-    uds_service_message *msg = (uds_service_message *)buf;
-    fprintf(stdout, "diag_session_control handle msg\n");
-    uint8_t *param;
-    if (size < 2) {
-        msg->sid = 0x7f;
-        msg->sub_id = 0x10;
-        param = msg->param;
-        param[0] = 0x13;
-        response(msg, 0x4);
-    } else {
+    uint8_t mode = *(uint8_t *)buf;
+    char _buf[3];
+    fprintf(stdout, "diag_session_control handle msg:%d, mode:%d\n", size, mode);
 
-    }
+    _buf[0] = 0x02;
+    _buf[1] = 0x50;
+    _buf[2] = mode;
+    response(can_id + 1, _buf, 3);
+
+    this->mode = mode;
 
     return 0;
 }
 
-int ecu_reset::handle_msg(void *buf, size_t size)
+int ecu_reset::handle_msg(int can_id, void *buf, size_t size)
 {
     return 0;
 }
